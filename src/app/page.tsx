@@ -3,18 +3,18 @@
 import { useChat } from "@ai-sdk/react";
 
 export default function Chat() {
-  const { messages, input, handleInputChange, handleSubmit } = useChat();
+  const { messages, input, handleInputChange, handleSubmit } = useChat({
+    api: "/api/chat",
+    onError(err) { console.error("chat error", err); },
+    onResponse(res) { console.log("got response", res); }
+  });
+  
   return (
     <div className="flex flex-col w-full max-w-md py-24 mx-auto stretch">
-      {messages.map((message) => (
-        <div key={message.id} className="whitespace-pre-wrap">
-          {message.role === "user" ? "User: " : "AI: "}
-          {message.parts.map((part, i) => {
-            switch (part.type) {
-              case "text":
-                return <div key={`${message.id}-${i}`}>{part.text}</div>;
-            }
-          })}
+      {messages.map((m) => (
+        <div key={m.id} className="whitespace-pre-wrap">
+          <strong>{m.role === "user" ? "You: " : "AI: "}</strong>
+          {m.parts.map((p, i) => p.type === "text" && <span key={i}>{p.text}</span>)}
         </div>
       ))}
 
