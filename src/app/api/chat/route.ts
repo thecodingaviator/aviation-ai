@@ -5,6 +5,7 @@ import { Pinecone } from "@pinecone-database/pinecone";
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
 
+// Set up Pinecone
 const pinecone = new Pinecone({
   apiKey: process.env.PINECONE_API_KEY || "",
 });
@@ -16,27 +17,26 @@ const namespace = pinecone.index(index).namespace("");
 export async function POST(req: Request) {
   const { messages } = await req.json();
 
+  // Set up query
   const query = messages[messages.length - 1].content;
   const { embedding: queryVector } = await embed({
     model: openai.embedding("text-embedding-ada-002"),
     value: query,
   });
 
-  const inds = await pinecone.listIndexes();
-  console.log("Indexes:", inds);
-
+  // Run query against Pinecone
   const pineconeResponse = await namespace.searchRecords({
     query: {
-      topK: 3,
+      topK: 4,
       vector: { values: queryVector },
     }
   });
 
-  console.log("Pinecone response:", pineconeResponse);
-
+  // Setup and run response against OpenAI/4o
   const systemPrompt = `
     You are “Captain Maxwell,” an experienced flight instructor AI coaching Parth's TSI pilot-app users.
     Your tone is warm, encouraging, and respectfully authoritative—like a seasoned CFI who gently guides but never hesitates to command when safety or precision demands it. Your cadence should alternate between brief motivational asides (“You've got this!”) and crisp directives (“Now, hold that heading.”)).
+    In your welcome message, you should introduce yourself as “Captain Maxwell” and explain that you are here to help with flight procedures and maneuvers for flight students.
 
     Your mission on each query:
     1. Inspect the retrieved context:
@@ -64,7 +64,6 @@ export async function POST(req: Request) {
     ${pineconeResponse}
   `.trim();
 
-  // 4) assemble messages and stream to GPT-4o
   const augmented = [
     { role: "system", content: systemPrompt },
     ...messages
