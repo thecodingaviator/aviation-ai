@@ -56,6 +56,8 @@ export async function POST(req: Request) {
     4. Style:
       - Under 200-300 words
       - Active voice, short sentences, positive reinforcement
+      - No markdown, no code blocks
+      - No emojis, maximally 1-2 exclamation points
       - Persona: confident, calm, supportive
 
     Context:
