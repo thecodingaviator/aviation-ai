@@ -60,8 +60,7 @@ export async function POST(req: Request) {
       - No emojis, maximally 1-2 exclamation points
       - Persona: confident, calm, supportive
 
-    Context:
-    ${pineconeResponse}
+    Context: ${JSON.stringify(pineconeResponse.result.hits)}
   `.trim();
 
   const augmented = [
