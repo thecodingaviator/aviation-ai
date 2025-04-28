@@ -1,30 +1,29 @@
-import { openai } from "@ai-sdk/openai";
-import { streamText, embed } from "ai";
-import { Pinecone } from "@pinecone-database/pinecone";
+import { openai } from '@ai-sdk/openai';
+import { streamText, embed } from 'ai';
+import { Pinecone } from '@pinecone-database/pinecone';
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
 
-// Set up Pinecone
+// 1) Set up Pinecone
 const pinecone = new Pinecone({
-  apiKey: process.env.PINECONE_API_KEY || "",
+  apiKey: process.env.PINECONE_API_KEY || '',
 });
+const index = process.env.PINECONE_INDEX_NAME || 'faahandbooks';
+const namespace = pinecone.index(index).namespace('');
 
-const index = process.env.PINECONE_INDEX_NAME || "faahandbooks";
-const namespace = pinecone.index(index).namespace("");
-
-
+// POST /api/chat
 export async function POST(req: Request) {
   const { messages } = await req.json();
 
-  // Set up query
+  // 2) Extract the user's query and embed it
   const query = messages[messages.length - 1].content;
   const { embedding: queryVector } = await embed({
-    model: openai.embedding("text-embedding-ada-002"),
+    model: openai.embedding('text-embedding-ada-002'),
     value: query,
   });
 
-  // Run query against Pinecone
+  // 3) Retrieve the top-4 relevant handbook snippets from Pinecone
   const pineconeResponse = await namespace.searchRecords({
     query: {
       topK: 4,
@@ -32,9 +31,9 @@ export async function POST(req: Request) {
     }
   });
 
-  // Setup and run response against OpenAI/4o
+  // 4) Build the system-prompt with context and “Aviation AI” instructions
   const systemPrompt = `
-    STRICTLY: If the query: "${query}" is not aviation-related, respond: “I'm sorry, I can't help with that. I'm only trained to work with aviation-related questions.”
+    STRICTLY: If the query: '${query}' is not aviation-related, respond: “I'm sorry, I can't help with that. I'm only trained to work with aviation-related questions.” unless it is a greeting.
 
     You are “Aviation AI,” an experienced flight instructor AI coaching pilot-app users.
     Your tone is warm, encouraging, and respectfully authoritative—like a seasoned CFI who gently guides but never hesitates to command when safety or precision demands it. Your cadence should alternate between brief motivational asides (“You've got this!”) and crisp directives (“Now, hold that heading.”)).
@@ -53,15 +52,12 @@ export async function POST(req: Request) {
       - If there are ≥1 FAA-handbook snippets under “Context:”, use only that material.
       - If there are 0 snippets:
         - STRICTLY: If the query is not aviation-related, respond: “I'm sorry, I can't help with that. I'm only trained to work with aviation-related questions.”
-        - If the query: "${query}" is about a metadata kind of question (e.g. “What is the FAA?”), respond accordingly.
-          The difference between a metadata question and a procedure question is that metadata questions are about the FAA itself, while procedure questions are about how to do something in aviation.
-          For example, “What is the FAA?” is a metadata question, while “How do I perform a stall recovery?” is a procedure question.
-        - If the query is about a procedure, respond:
-          “I'm sorry, I don't have that procedure in my data. For the latest guidance, please consult the FAA Handbook or the official FAA website.”
+        - If it's a metadata question (e.g. “What is the FAA?”), answer accordingly.
+        - If it's a procedure question you don't have, say: “I'm sorry, I don't have that procedure in my data. For the latest guidance, please consult the FAA Handbook or the official FAA website.”
     2. When you do answer:
       - Begin: “Alright, let's walk through this step by step…”
-      - Use precise terms (e.g. “angle of attack”) but explain jargon in plain English.
-      - Cite handbook section/page (e.g. “Refer to Chapter 5, Section 2, Pg 5-3.”) where the source is evident.
+      - Use precise terms but explain jargon in plain English.
+      - Cite handbook section/page (e.g. “Refer to Chapter 5, Section 2, Pg 5-3.”).
       - End with *Instructor's note:* (one tip).
     3. Structure:
       - Brief Intro (1-2 sentences)
@@ -71,23 +67,25 @@ export async function POST(req: Request) {
     4. Style:
       - Under 200-300 words
       - Active voice, short sentences, positive reinforcement
-      - No markdown, no code blocks
-      - No emojis, maximally 1-2 exclamation points
+      - No markdown, no code blocks, no emojis
       - Persona: confident, calm, supportive
 
     Context: ${JSON.stringify(pineconeResponse.result.hits)}
   `.trim();
 
+  // 5) Prepend our system-prompt to the user's message history
   const augmented = [
-    { role: "system", content: systemPrompt },
+    { role: 'system', content: systemPrompt },
     ...messages
   ];
 
+  // 6) Call OpenAI's GPT-4o with streaming
   const result = streamText({
-    model: openai("gpt-4o"),
-    system: "",
+    model: openai('gpt-4o'),
+    system: '',
     messages: augmented,
   });
 
+  // 7) Return the AI's streaming response back to the client
   return result.toDataStreamResponse();
 }
