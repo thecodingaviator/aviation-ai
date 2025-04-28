@@ -14,7 +14,7 @@ const Message = ({ message }: MessageProps) => {
             }
         >
             <div className="font-semibold mb-2">
-                {message.role === "user" ? "You" : "Capt. Maxwell"}
+                {message.role === "user" ? "You" : "Aviation AI"}
             </div>
             <div className="whitespace-pre-wrap leading-relaxed text-sm text-justify">
                 {message.parts?.map((part, i) => {
