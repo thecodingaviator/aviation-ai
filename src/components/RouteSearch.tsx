@@ -1,16 +1,18 @@
-import React from 'react';
-import Button from '@/utils/components/Button';
-import dynamic from 'next/dynamic';
+import React from "react";
+import Button from "@/utils/components/Button";
+import dynamic from "next/dynamic";
 
 // Dynamically import PolylineMap with no SSR
-const PolylineMap = dynamic(() => import('../utils/components/PolylineMap'), { ssr: false });
+const PolylineMap = dynamic(() => import("../utils/components/PolylineMap"), {
+  ssr: false,
+});
 
 const RouteSearch = () => {
   // Local state for IFR Routes tool
-  const [fromICAO, setFromICAO] = React.useState('');
-  const [toICAO, setToICAO] = React.useState('');
-  const [encoded, setEncoded] = React.useState<string>('');
-  const [routeError, setRouteError] = React.useState<string>('');
+  const [fromICAO, setFromICAO] = React.useState("");
+  const [toICAO, setToICAO] = React.useState("");
+  const [encoded, setEncoded] = React.useState<string>("");
+  const [routeError, setRouteError] = React.useState<string>("");
 
   // Fetch IFR route polyline between two ICAO codes
   const fetchRoute = async (from: string, to: string) => {
@@ -18,7 +20,7 @@ const RouteSearch = () => {
     if (res.ok) {
       const json = await res.json();
       setEncoded(json.encodedPolyline);
-      setRouteError('');
+      setRouteError("");
     } else {
       setRouteError(`Error: ${res.status} ${res.statusText}`);
     }
@@ -33,7 +35,7 @@ const RouteSearch = () => {
             type="text"
             placeholder="From ICAO"
             value={fromICAO}
-            onChange={e => setFromICAO(e.target.value.toUpperCase())}
+            onChange={(e) => setFromICAO(e.target.value.toUpperCase())}
             className="w-[40%] bg-gray-100 bg-opacity-80 font-mono border border-gray-300 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300 placeholder-gray-500 text-center"
           />
           <span className="font-bold text-center">→</span>
@@ -41,7 +43,7 @@ const RouteSearch = () => {
             type="text"
             placeholder="To ICAO"
             value={toICAO}
-            onChange={e => setToICAO(e.target.value.toUpperCase())}
+            onChange={(e) => setToICAO(e.target.value.toUpperCase())}
             className="w-[40%] bg-gray-100 bg-opacity-80 font-mono border border-gray-300 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300 placeholder-gray-500 text-center"
           />
         </div>

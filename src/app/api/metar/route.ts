@@ -1,10 +1,12 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
 // Geocode via OpenStreetMap/Nominatim:
-async function geocode(place: string): Promise<{ lat: number; lon: number } | null> {
+async function geocode(
+  place: string,
+): Promise<{ lat: number; lon: number } | null> {
   const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${encodeURIComponent(place)}`;
   const res = await fetch(url, {
-    headers: { 'User-Agent': 'AviationAI/1.0' },
+    headers: { "User-Agent": "AviationAI/1.0" },
   });
   if (!res.ok) return null;
   const data = await res.json();
@@ -48,12 +50,12 @@ async function fetchMetarByText(place: string): Promise<string | null> {
 export async function GET(request: Request) {
   // Parse and validate the `q` parameter
   const { searchParams } = new URL(request.url);
-  const q = searchParams.get('q')?.trim();
+  const q = searchParams.get("q")?.trim();
   if (!q) {
-    console.error('Missing `q` parameter');
+    console.error("Missing `q` parameter");
     return NextResponse.json(
-      { error: 'Missing `q` parameter' },
-      { status: 400 }
+      { error: "Missing `q` parameter" },
+      { status: 400 },
     );
   }
 
@@ -73,13 +75,13 @@ export async function GET(request: Request) {
   if (metar) {
     return new Response(metar, {
       status: 200,
-      headers: { 'Content-Type': 'text/plain; charset=utf-8' },
+      headers: { "Content-Type": "text/plain; charset=utf-8" },
     });
   }
 
   // No METAR found → return 404 JSON error
   return NextResponse.json(
     { error: `No METAR found for “${q}”` },
-    { status: 404 }
+    { status: 404 },
   );
 }

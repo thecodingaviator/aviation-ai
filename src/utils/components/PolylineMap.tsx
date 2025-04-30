@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import React, { useRef, useEffect, useMemo } from 'react';
-import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
-import polyline from '@mapbox/polyline';
+import React, { useRef, useEffect, useMemo } from "react";
+import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
+import polyline from "@mapbox/polyline";
 
 // Props for the PolylineMap component
 interface PolylineMapProps {
@@ -14,13 +14,13 @@ interface PolylineMapProps {
 // Main component rendering a Google Map with a polyline and markers
 const PolylineMap = ({
   encoded,
-  width = '100%',
-  height = '300px',
+  width = "100%",
+  height = "300px",
 }: PolylineMapProps) => {
   // Load the Google Maps JS API
   const { isLoaded, loadError } = useJsApiLoader({
-    id: 'google-map-script',
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '',
+    id: "google-map-script",
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
   });
 
   // Refs to store the map instance and the current polyline
@@ -33,7 +33,10 @@ const PolylineMap = ({
   }, [encoded]);
 
   // Determine the initial map center (first point or fallback - Dayton, OH)
-  const center = path[0] ?? { lat: 39.754669558947555, lng: -84.21155425333451 };
+  const center = path[0] ?? {
+    lat: 39.754669558947555,
+    lng: -84.21155425333451,
+  };
 
   // On path change: remove any old polyline and draw the new one
   useEffect(() => {
@@ -46,10 +49,10 @@ const PolylineMap = ({
     }
 
     // Create and display the new polyline
-    const gmPath = path.map(p => new google.maps.LatLng(p.lat, p.lng));
+    const gmPath = path.map((p) => new google.maps.LatLng(p.lat, p.lng));
     const newPoly = new google.maps.Polyline({
       path: gmPath,
-      strokeColor: 'darkblue',
+      strokeColor: "darkblue",
       strokeOpacity: 0.8,
       strokeWeight: 4,
     });
@@ -64,16 +67,18 @@ const PolylineMap = ({
   // Render the GoogleMap and place markers at each path point
   return (
     <GoogleMap
-      onLoad={map => { mapRef.current = map; }}    // Capture map instance
-      mapContainerStyle={{ width, height }}       // Container size
-      center={center}                             
-      zoom={2}                                    // Default zoom
+      onLoad={(map) => {
+        mapRef.current = map;
+      }} // Capture map instance
+      mapContainerStyle={{ width, height }} // Container size
+      center={center}
+      zoom={2} // Default zoom
     >
       {path.map((pos, i) => (
         <Marker key={i} position={pos} />
       ))}
     </GoogleMap>
   );
-}
+};
 
 export default PolylineMap;

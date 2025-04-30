@@ -1,14 +1,15 @@
-import React from 'react';
-import Button from '@/utils/components/Button';
+import React from "react";
+import Button from "@/utils/components/Button";
 
+// Props definition for Metar component
 interface MetarProps {
   onInsert: (value: string) => void;
   onClose: () => void;
 }
 
-const Metar = ({ onInsert, onClose } : MetarProps) => {
-  const [metarParam, setMetarParam] = React.useState<string>('');
-  const [metar, setMetar] = React.useState<string>('');
+const Metar = ({ onInsert, onClose }: MetarProps) => {
+  const [metarParam, setMetarParam] = React.useState<string>("");
+  const [metar, setMetar] = React.useState<string>("");
 
   // Fetch METAR given ICAO or location string
   const fetchMetar = async (param: string): Promise<void> => {
@@ -17,7 +18,7 @@ const Metar = ({ onInsert, onClose } : MetarProps) => {
       const text = await res.text();
       setMetar(text);
     } else {
-      setMetar('Error fetching METAR');
+      setMetar("Error fetching METAR");
     }
   };
 
@@ -29,7 +30,7 @@ const Metar = ({ onInsert, onClose } : MetarProps) => {
           type="text"
           placeholder="ICAO or location"
           value={metarParam}
-          onChange={e => setMetarParam(e.target.value)}
+          onChange={(e) => setMetarParam(e.target.value)}
           className="flex-1 bg-gray-100 bg-opacity-80 font-mono border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300 placeholder-gray-500 max-[660px]:col-span-2"
         />
         <Button
@@ -41,16 +42,16 @@ const Metar = ({ onInsert, onClose } : MetarProps) => {
         </Button>
         <Button
           variant={
-            !metar || metar.toLowerCase().startsWith('error')
-              ? 'disabled'
-              : 'default'
+            !metar || metar.toLowerCase().startsWith("error")
+              ? "disabled"
+              : "default"
           }
-          disabled={!metar || metar.toLowerCase().startsWith('error')}
+          disabled={!metar || metar.toLowerCase().startsWith("error")}
           onClick={() => {
-            if (!metar.toLowerCase().startsWith('error')) {
-              onInsert('Decode: ' + metar);
-              setMetarParam('');
-              setMetar('');
+            if (!metar.toLowerCase().startsWith("error")) {
+              onInsert("Decode: " + metar);
+              setMetarParam("");
+              setMetar("");
               onClose();
             }
           }}

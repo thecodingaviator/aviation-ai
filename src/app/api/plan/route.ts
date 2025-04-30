@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 export interface FPDBUser {
   id: number;
@@ -35,23 +35,22 @@ export interface FlightPlan {
   tags: string[];
   user: FPDBUser;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  application: any;     // null or whatever shape it may take later
+  application: any; // null or whatever shape it may take later
   cycle: FPDBCycle;
 }
-
 
 export type PlanSearchResponse = FlightPlan[];
 
 export async function GET(request: NextRequest) {
   // Extract and trim query parameters
   const { searchParams } = new URL(request.url);
-  const fromICAO = searchParams.get('fromICAO')?.trim();
-  const toICAO   = searchParams.get('toICAO')?.trim();
+  const fromICAO = searchParams.get("fromICAO")?.trim();
+  const toICAO = searchParams.get("toICAO")?.trim();
 
   // Validate required parameters
   if (!fromICAO || !toICAO) {
     return NextResponse.json(
-      { error: 'Missing query parameters: fromICAO and toICAO are required' },
+      { error: "Missing query parameters: fromICAO and toICAO are required" },
       { status: 400 },
     );
   }

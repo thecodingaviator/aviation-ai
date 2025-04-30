@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Message from '@/utils/components/Message';
-import Modal from '@/components/Modal';
-import Button from '@/utils/components/Button';
-import { useChat } from '@ai-sdk/react';
+import React from "react";
+import Message from "@/utils/components/Message";
+import Modal from "@/components/Modal";
+import Button from "@/utils/components/Button";
+import { useChat } from "@ai-sdk/react";
 
 const Chat = () => {
   // Local UI state for the settings modal
@@ -12,10 +12,19 @@ const Chat = () => {
   const [isLoading, setIsLoading] = React.useState(false);
 
   // Chat hook setup: messages, current input, and handlers
-  const { messages, input, handleInputChange, handleSubmit: chatSubmit } = useChat({
-    api: '/api/chat',
-    onError(err) { console.error('chat error', err); },
-    onResponse() { setIsLoading(false); }
+  const {
+    messages,
+    input,
+    handleInputChange,
+    handleSubmit: chatSubmit,
+  } = useChat({
+    api: "/api/chat",
+    onError(err) {
+      console.error("chat error", err);
+    },
+    onResponse() {
+      setIsLoading(false);
+    },
   });
 
   // Chat submit handler
@@ -28,31 +37,31 @@ const Chat = () => {
   // Helper to insert METAR text into the chat input
   const insertMetar = (value: string) => {
     handleInputChange({
-      target: { value }
+      target: { value },
     } as React.ChangeEvent<HTMLInputElement>);
   };
 
   return (
     <div>
       {/* Chat header and introduction */}
-      <div className='font-mono flex flex-col w-full max-w-md py-24 mx-auto stretch'>
-        <h1 className='text-center text-xl'>Aviation AI</h1>
-        <p className='text-center w-full text-sm mb-4 text-gray-500'>
+      <div className="font-mono flex flex-col w-full max-w-md py-24 mx-auto stretch">
+        <h1 className="text-center text-xl">Aviation AI</h1>
+        <p className="text-center w-full text-sm mb-4 text-gray-500">
           Ask me about flight procedures and maneuvers
         </p>
 
         {/* Render chat message list */}
-        {messages.map(msg => (
+        {messages.map((msg) => (
           <Message key={msg.id} message={msg} />
         ))}
         {isLoading && (
           <Message
-            key='Thinking...'
+            key="Thinking..."
             message={{
-              id: 'Thinking...',
-              role: 'assistant',
-              content: 'Thinking...',
-              parts: [{ type: 'text', text: 'Thinking...' }],
+              id: "Thinking...",
+              role: "assistant",
+              content: "Thinking...",
+              parts: [{ type: "text", text: "Thinking..." }],
             }}
           />
         )}
@@ -98,6 +107,6 @@ const Chat = () => {
       </div>
     </div>
   );
-}
+};
 
 export default Chat;

@@ -1,16 +1,16 @@
-import { openai } from '@ai-sdk/openai';
-import { streamText, embed } from 'ai';
-import { Pinecone } from '@pinecone-database/pinecone';
+import { openai } from "@ai-sdk/openai";
+import { streamText, embed } from "ai";
+import { Pinecone } from "@pinecone-database/pinecone";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
 
 // Set up Pinecone
 const pinecone = new Pinecone({
-  apiKey: process.env.PINECONE_API_KEY || '',
+  apiKey: process.env.PINECONE_API_KEY || "",
 });
-const index = process.env.PINECONE_INDEX_NAME || 'faahandbooks';
-const namespace = pinecone.index(index).namespace('');
+const index = process.env.PINECONE_INDEX_NAME || "faahandbooks";
+const namespace = pinecone.index(index).namespace("");
 
 // POST /api/chat
 export async function POST(req: Request) {
@@ -19,7 +19,7 @@ export async function POST(req: Request) {
   // Extract the user's query and embed it
   const query = messages[messages.length - 1].content;
   const { embedding: queryVector } = await embed({
-    model: openai.embedding('text-embedding-ada-002'),
+    model: openai.embedding("text-embedding-ada-002"),
     value: query,
   });
 
@@ -28,7 +28,7 @@ export async function POST(req: Request) {
     query: {
       topK: 4,
       vector: { values: queryVector },
-    }
+    },
   });
 
   // Build the system-prompt with context and “Aviation AI” instructions
@@ -75,15 +75,12 @@ export async function POST(req: Request) {
   `.trim();
 
   // Prepend our system-prompt to the user's message history
-  const augmented = [
-    { role: 'system', content: systemPrompt },
-    ...messages
-  ];
+  const augmented = [{ role: "system", content: systemPrompt }, ...messages];
 
   // Call OpenAI's GPT-4o with streaming
   const result = streamText({
-    model: openai('gpt-4o'),
-    system: '',
+    model: openai("gpt-4o"),
+    system: "",
     messages: augmented,
   });
 
