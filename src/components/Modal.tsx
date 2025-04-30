@@ -179,5 +179,4 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onInsert }) => {
   );
 };
 
-// 13) Export Modal component
 export default Modal;
