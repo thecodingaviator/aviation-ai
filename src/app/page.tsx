@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Message from '@/components/Message';
 import Modal from '@/components/Modal';
 import Button from '@/components/Button';
@@ -8,16 +8,24 @@ import { useChat } from '@ai-sdk/react';
 
 export default function Chat() {
   // 1) Local UI state for the settings modal
-  const [isModalOpen, setModalOpen] = React.useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // 2) Chat hook setup: messages, current input, and handlers
-  const { messages, input, handleInputChange, handleSubmit } = useChat({
+  const { messages, input, handleInputChange, handleSubmit: chatSubmit } = useChat({
     api: '/api/chat',
     onError(err) { console.error('chat error', err); },
-    onResponse(res) { console.log('got response', res); }
+    onResponse() { setIsLoading(false); }
   });
 
-  // 3) Helper to insert METAR text into the chat input
+  // 3) Chat submit handler
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+    chatSubmit(e);
+  };
+
+  // 4) Helper to insert METAR text into the chat input
   const insertMetar = (value: string) => {
     handleInputChange({
       target: { value }
@@ -26,20 +34,31 @@ export default function Chat() {
 
   return (
     <div>
-      {/* 4) Chat header and introduction */}
+      {/* 5) Chat header and introduction */}
       <div className='font-mono flex flex-col w-full max-w-md py-24 mx-auto stretch'>
         <h1 className='text-center text-xl'>Aviation AI</h1>
         <p className='text-center w-full text-sm mb-4 text-gray-500'>
           Ask me about flight procedures and maneuvers
         </p>
 
-        {/* 5) Render chat message list */}
+        {/* 6) Render chat message list */}
         {messages.map(msg => (
           <Message key={msg.id} message={msg} />
         ))}
+        {isLoading && (
+          <Message
+            key='Thinking...'
+            message={{
+              id: 'Thinking...',
+              role: 'assistant',
+              content: 'Thinking...',
+              parts: [{ type: 'text', text: 'Thinking...' }],
+            }}
+          />
+        )}
       </div>
 
-      {/* 6) Chat input and settings button */}
+      {/* 7) Chat input and settings button */}
       <div className="fixed bottom-0 w-full bg-white p-2">
         <div
           className="
@@ -48,8 +67,8 @@ export default function Chat() {
             md:mx-auto md:max-w-md
           "
         >
-          {/* chat input */}
-          <form onSubmit={handleSubmit} className="w-full">
+          {/* 7.1) chat input */}
+          <form onSubmit={handleFormSubmit} className="w-full">
             <input
               value={input}
               onChange={handleInputChange}
@@ -61,19 +80,19 @@ export default function Chat() {
             />
           </form>
 
-          {/* settings button */}
+          {/* 7.2) settings button */}
           <Button
             variant="default"
-            onClick={() => setModalOpen(true)}
+            onClick={() => setIsModalOpen(true)}
             className="w-full md:w-auto"
           >
             🔧
           </Button>
         </div>
-        {/* 7) Settings modal for METAR input */}
+        {/* 8) Settings modal for METAR input */}
         <Modal
           isOpen={isModalOpen}
-          onClose={() => setModalOpen(false)}
+          onClose={() => setIsModalOpen(false)}
           onInsert={insertMetar}
         />
       </div>
