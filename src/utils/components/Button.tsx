@@ -10,13 +10,13 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 // Button component implementation
-const Button: React.FC<ButtonProps> = ({
+const Button = ({
   variant = 'default',    // Default to 'default' variant
   onClick,                // User-provided click handler
   className = '',         // Additional class names
   children,               // Button contents
   ...props                // Other native button props
-}) => {
+}: ButtonProps) => {
   // Base styling shared by all variants
   const baseStyles =
     'font-mono uppercase tracking-wider px-4 py-2 rounded-xl focus:outline-none focus:ring-2 transition-colors duration-200 ease-in-out cursor-pointer';

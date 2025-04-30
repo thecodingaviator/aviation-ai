@@ -1,8 +1,8 @@
 import React from 'react';
 import Button from '@/utils/components/Button';
-import dynamic from 'next/dynamic';
 
 import Metar from '@/components/Metar';
+import RouteSearch from '@/components/RouteSearch';
 
 // Props definition for Modal
 interface ModalProps {
@@ -11,35 +11,14 @@ interface ModalProps {
   onInsert: (value: string) => void;
 }
 
-// Dynamically import PolylineMap with no SSR
-const PolylineMap = dynamic(() => import('../utils/components/PolylineMap'), { ssr: false });
-
 // Modal component
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onInsert }) => {
-
-  // Local state for IFR Routes tool
-  const [fromICAO, setFromICAO] = React.useState('');
-  const [toICAO, setToICAO] = React.useState('');
-  const [encoded, setEncoded] = React.useState<string>('');
-  const [routeError, setRouteError] = React.useState<string>('');
+const Modal = ({ isOpen, onClose, onInsert }: ModalProps) => {
 
   // State to track active tab
   const [activeTab, setActiveTab] = React.useState<'METAR' | 'ROUTE'>('METAR');
 
   // Don't render anything if modal is closed
   if (!isOpen) return null;
-
-  // Fetch IFR route polyline between two ICAO codes
-  const fetchRoute = async (from: string, to: string) => {
-    const res = await fetch(`/api/plan?fromICAO=${from}&toICAO=${to}`);
-    if (res.ok) {
-      const json = await res.json();
-      setEncoded(json.encodedPolyline);
-      setRouteError('');
-    } else {
-      setRouteError(`Error: ${res.status} ${res.statusText}`);
-    }
-  };
 
   return (
     // Modal backdrop & container
@@ -86,47 +65,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onInsert }) => {
         </nav>
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
           {activeTab === 'METAR' && <Metar onInsert={onInsert} onClose={onClose} />}
-
-          {activeTab === 'ROUTE' && (
-            <div className="flex flex-col space-y-4">
-              <h3 className="uppercase tracking-wide text-lg">Get IFR Routes</h3>
-              <div className="grid items-center grid-cols-[7fr_2fr] gap-4">
-                <div className="flex items-center justify-between">
-                  <input
-                    type="text"
-                    placeholder="From ICAO"
-                    value={fromICAO}
-                    onChange={e => setFromICAO(e.target.value.toUpperCase())}
-                    className="w-[40%] bg-gray-100 bg-opacity-80 font-mono border border-gray-300 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300 placeholder-gray-500 text-center"
-                  />
-                  <span className="font-bold text-center">→</span>
-                  <input
-                    type="text"
-                    placeholder="To ICAO"
-                    value={toICAO}
-                    onChange={e => setToICAO(e.target.value.toUpperCase())}
-                    className="w-[40%] bg-gray-100 bg-opacity-80 font-mono border border-gray-300 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300 placeholder-gray-500 text-center"
-                  />
-                </div>
-                <Button
-                  className="w-full self-end"
-                  onClick={() => fetchRoute(fromICAO, toICAO)}
-                >
-                  GET
-                </Button>
-              </div>
-              <div className="mt-4 flex flex-col space-y-2">
-                {routeError && (
-                  <pre className="bg-gray-100 bg-opacity-80 font-mono text-sm border border-gray-300 rounded-lg p-4 overflow-auto max-h-40 w-full">
-                    {routeError}
-                  </pre>
-                )}
-                <div className="w-full h-[300px]">
-                  <PolylineMap encoded={encoded} width="100%" height="100%" />
-                </div>
-              </div>
-            </div>
-          )}
+          {activeTab === 'ROUTE' && <RouteSearch />}
         </div>
       </div>
     </div>

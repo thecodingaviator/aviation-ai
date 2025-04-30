@@ -6,7 +6,7 @@ import Modal from '@/components/Modal';
 import Button from '@/utils/components/Button';
 import { useChat } from '@ai-sdk/react';
 
-export default function Chat() {
+const Chat = () => {
   // Local UI state for the settings modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -99,3 +99,5 @@ export default function Chat() {
     </div>
   );
 }
+
+export default Chat;

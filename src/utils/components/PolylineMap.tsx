@@ -12,11 +12,11 @@ interface PolylineMapProps {
 }
 
 // Main component rendering a Google Map with a polyline and markers
-export default function PolylineMap({
+const PolylineMap = ({
   encoded,
   width = '100%',
   height = '300px',
-}: PolylineMapProps) {
+}: PolylineMapProps) => {
   // Load the Google Maps JS API
   const { isLoaded, loadError } = useJsApiLoader({
     id: 'google-map-script',
@@ -75,3 +75,5 @@ export default function PolylineMap({
     </GoogleMap>
   );
 }
+
+export default PolylineMap;

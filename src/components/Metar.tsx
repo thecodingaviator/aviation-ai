@@ -7,7 +7,7 @@ interface MetarProps {
   onClose: () => void;
 }
 
-const Metar: React.FC<MetarProps> = ({ onInsert, onClose }) => {
+const Metar = ({ onInsert, onClose } : MetarProps) => {
   const [metarParam, setMetarParam] = React.useState<string>('');
   const [metar, setMetar] = React.useState<string>('');
 
