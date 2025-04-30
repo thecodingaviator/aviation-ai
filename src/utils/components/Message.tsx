@@ -15,17 +15,14 @@ const Message = ({ message }: MessageProps) => {
     // Outer container with conditional styling based on sender
     <div
       key={message.id}
-      className={`
-        p-4 my-2 rounded-2xl border
-        ${
-          isUser
-            ? "border-blue-200 bg-blue-100 bg-opacity-90 text-blue-900 shadow-[0_0_10px_rgba(150,200,255,0.7)]"
-            : "border-gray-200 bg-gray-50 bg-opacity-90 text-gray-800 shadow-[0_0_10px_rgba(200,200,200,0.7)]"
-        }
-      `}
+      className={`my-2 rounded-2xl border p-4 ${
+        isUser
+          ? "bg-opacity-90 border-blue-200 bg-blue-100 text-blue-900 shadow-[0_0_10px_rgba(150,200,255,0.7)]"
+          : "bg-opacity-90 border-gray-200 bg-gray-50 text-gray-800 shadow-[0_0_10px_rgba(200,200,200,0.7)]"
+      } `}
     >
       {/* Header: show “You” for user, “Aviation AI” otherwise */}
-      <div className="font-mono uppercase tracking-wider mb-2">
+      <div className="mb-2 font-mono tracking-wider uppercase">
         {isUser ? "You" : "Aviation AI"}
       </div>
 

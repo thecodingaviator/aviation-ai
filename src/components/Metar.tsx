@@ -24,14 +24,14 @@ const Metar = ({ onInsert, onClose }: MetarProps) => {
 
   return (
     <div className="flex flex-col space-y-4">
-      <h3 className="uppercase tracking-wide text-lg">Get METAR</h3>
-      <div className="grid items-center gap-4 grid-cols-[7fr_1fr_1fr] max-[660px]:grid-cols-2">
+      <h3 className="text-lg tracking-wide uppercase">Get METAR</h3>
+      <div className="grid grid-cols-[7fr_1fr_1fr] items-center gap-4 max-[660px]:grid-cols-2">
         <input
           type="text"
           placeholder="ICAO or location"
           value={metarParam}
           onChange={(e) => setMetarParam(e.target.value)}
-          className="flex-1 bg-gray-100 bg-opacity-80 font-mono border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300 placeholder-gray-500 max-[660px]:col-span-2"
+          className="bg-opacity-80 flex-1 rounded-xl border border-gray-300 bg-gray-100 px-4 py-2 font-mono placeholder-gray-500 focus:ring-2 focus:ring-gray-300 focus:outline-none max-[660px]:col-span-2"
         />
         <Button
           variant="default"
@@ -55,14 +55,14 @@ const Metar = ({ onInsert, onClose }: MetarProps) => {
               onClose();
             }
           }}
-          className="self-end max-[660px]:self-auto max-[660px]:w-full"
+          className="self-end max-[660px]:w-full max-[660px]:self-auto"
         >
           Insert
         </Button>
       </div>
       {metar && (
         <div className="mt-4 flex flex-col space-y-2">
-          <pre className="bg-gray-100 bg-opacity-80 font-mono text-sm border border-gray-300 rounded-lg p-4 overflow-auto max-h-40 w-full">
+          <pre className="bg-opacity-80 max-h-40 w-full overflow-auto rounded-lg border border-gray-300 bg-gray-100 p-4 font-mono text-sm">
             {metar}
           </pre>
         </div>

@@ -28,23 +28,23 @@ const RouteSearch = () => {
 
   return (
     <div className="flex flex-col space-y-4">
-      <h3 className="uppercase tracking-wide text-lg">Get IFR Routes</h3>
-      <div className="grid items-center grid-cols-[7fr_2fr] gap-4">
+      <h3 className="text-lg tracking-wide uppercase">Get IFR Routes</h3>
+      <div className="grid grid-cols-[7fr_2fr] items-center gap-4">
         <div className="flex items-center justify-between">
           <input
             type="text"
             placeholder="From ICAO"
             value={fromICAO}
             onChange={(e) => setFromICAO(e.target.value.toUpperCase())}
-            className="w-[40%] bg-gray-100 bg-opacity-80 font-mono border border-gray-300 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300 placeholder-gray-500 text-center"
+            className="bg-opacity-80 w-[40%] rounded-xl border border-gray-300 bg-gray-100 px-3 py-2 text-center font-mono placeholder-gray-500 focus:ring-2 focus:ring-gray-300 focus:outline-none"
           />
-          <span className="font-bold text-center">→</span>
+          <span className="text-center font-bold">→</span>
           <input
             type="text"
             placeholder="To ICAO"
             value={toICAO}
             onChange={(e) => setToICAO(e.target.value.toUpperCase())}
-            className="w-[40%] bg-gray-100 bg-opacity-80 font-mono border border-gray-300 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300 placeholder-gray-500 text-center"
+            className="bg-opacity-80 w-[40%] rounded-xl border border-gray-300 bg-gray-100 px-3 py-2 text-center font-mono placeholder-gray-500 focus:ring-2 focus:ring-gray-300 focus:outline-none"
           />
         </div>
         <Button
@@ -56,11 +56,11 @@ const RouteSearch = () => {
       </div>
       <div className="mt-4 flex flex-col space-y-2">
         {routeError && (
-          <pre className="bg-gray-100 bg-opacity-80 font-mono text-sm border border-gray-300 rounded-lg p-4 overflow-auto max-h-40 w-full">
+          <pre className="bg-opacity-80 max-h-40 w-full overflow-auto rounded-lg border border-gray-300 bg-gray-100 p-4 font-mono text-sm">
             {routeError}
           </pre>
         )}
-        <div className="w-full h-[300px]">
+        <div className="h-[300px] w-full">
           <PolylineMap encoded={encoded} width="100%" height="100%" />
         </div>
       </div>

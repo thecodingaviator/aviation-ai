@@ -44,9 +44,9 @@ const Chat = () => {
   return (
     <div>
       {/* Chat header and introduction */}
-      <div className="font-mono flex flex-col w-full max-w-md py-24 mx-auto stretch">
+      <div className="stretch mx-auto flex w-full max-w-md flex-col py-24 font-mono">
         <h1 className="text-center text-xl">Aviation AI</h1>
-        <p className="text-center w-full text-sm mb-4 text-gray-500">
+        <p className="mb-4 w-full text-center text-sm text-gray-500">
           Ask me about flight procedures and maneuvers
         </p>
 
@@ -69,23 +69,14 @@ const Chat = () => {
 
       {/* Chat input and settings button */}
       <div className="fixed bottom-0 w-full bg-white p-2">
-        <div
-          className="
-            flex items-center justify-between space-x-2
-            max-[660px]:flex-col max-[660px]:space-y-2 max-[660px]:space-x-0
-            md:mx-auto md:max-w-md
-          "
-        >
+        <div className="flex items-center justify-between space-x-2 max-[660px]:flex-col max-[660px]:space-y-2 max-[660px]:space-x-0 md:mx-auto md:max-w-md">
           {/* chat input */}
           <form onSubmit={handleFormSubmit} className="w-full">
             <input
               value={input}
               onChange={handleInputChange}
               placeholder="Ask away..."
-              className="
-                w-full p-2 border border-zinc-300 rounded shadow-xl
-                dark:bg-zinc-900 dark:border-zinc-800
-              "
+              className="w-full rounded border border-zinc-300 p-2 shadow-xl dark:border-zinc-800 dark:bg-zinc-900"
             />
           </form>
 
