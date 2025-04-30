@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Message from '@/utils/components/Message';
 import Modal from '@/components/Modal';
 import Button from '@/utils/components/Button';
@@ -8,8 +8,8 @@ import { useChat } from '@ai-sdk/react';
 
 const Chat = () => {
   // Local UI state for the settings modal
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   // Chat hook setup: messages, current input, and handlers
   const { messages, input, handleInputChange, handleSubmit: chatSubmit } = useChat({

@@ -1,4 +1,3 @@
-// utils/components/Metar.tsx
 import React from 'react';
 import Button from '@/utils/components/Button';
 
