@@ -1,4 +1,3 @@
-import React from "react";
 import { Message as MessageType } from "@ai-sdk/react";
 
 // Importing the Message type from the AI SDK

@@ -41,7 +41,7 @@ const Button = ({
           onClick(event);
         }
       }}
-      className={`${baseStyles} ${variantStyles[variant]} ${className}`} // Combine styles
+      className={`${baseStyles} ${variantStyles[variant]} ${className}`}
     >
       {children}
     </button>

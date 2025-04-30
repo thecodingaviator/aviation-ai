@@ -1,10 +1,10 @@
 "use client";
 
-import React from "react";
-import Message from "@/utils/components/Message";
 import Modal from "@/components/Modal";
 import Button from "@/utils/components/Button";
+import Message from "@/utils/components/Message";
 import { useChat } from "@ai-sdk/react";
+import React from "react";
 
 const Chat = () => {
   // Local UI state for the settings modal

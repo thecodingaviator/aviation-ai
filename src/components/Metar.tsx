@@ -1,5 +1,5 @@
-import React from "react";
 import Button from "@/utils/components/Button";
+import React from "react";
 
 // Props definition for Metar component
 interface MetarProps {

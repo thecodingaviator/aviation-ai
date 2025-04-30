@@ -1,7 +1,7 @@
-import React from "react";
 import Metar from "@/components/Metar";
 import RouteSearch from "@/components/RouteSearch";
 import Button from "@/utils/components/Button";
+import React from "react";
 
 // Props definition for Modal
 interface ModalProps {

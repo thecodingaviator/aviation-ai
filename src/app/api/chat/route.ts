@@ -1,6 +1,6 @@
 import { openai } from "@ai-sdk/openai";
-import { streamText, embed } from "ai";
 import { Pinecone } from "@pinecone-database/pinecone";
+import { embed, streamText } from "ai";
 
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;

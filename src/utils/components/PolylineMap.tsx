@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useRef, useEffect, useMemo } from "react";
-import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
 import polyline from "@mapbox/polyline";
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+import { useEffect, useMemo, useRef } from "react";
 
 // Props for the PolylineMap component
 interface PolylineMapProps {
