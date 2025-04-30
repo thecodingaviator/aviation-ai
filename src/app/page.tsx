@@ -7,25 +7,25 @@ import Button from '@/utils/components/Button';
 import { useChat } from '@ai-sdk/react';
 
 export default function Chat() {
-  // 1) Local UI state for the settings modal
+  // Local UI state for the settings modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  // 2) Chat hook setup: messages, current input, and handlers
+  // Chat hook setup: messages, current input, and handlers
   const { messages, input, handleInputChange, handleSubmit: chatSubmit } = useChat({
     api: '/api/chat',
     onError(err) { console.error('chat error', err); },
     onResponse() { setIsLoading(false); }
   });
 
-  // 3) Chat submit handler
+  // Chat submit handler
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     chatSubmit(e);
   };
 
-  // 4) Helper to insert METAR text into the chat input
+  // Helper to insert METAR text into the chat input
   const insertMetar = (value: string) => {
     handleInputChange({
       target: { value }
@@ -34,14 +34,14 @@ export default function Chat() {
 
   return (
     <div>
-      {/* 5) Chat header and introduction */}
+      {/* Chat header and introduction */}
       <div className='font-mono flex flex-col w-full max-w-md py-24 mx-auto stretch'>
         <h1 className='text-center text-xl'>Aviation AI</h1>
         <p className='text-center w-full text-sm mb-4 text-gray-500'>
           Ask me about flight procedures and maneuvers
         </p>
 
-        {/* 6) Render chat message list */}
+        {/* Render chat message list */}
         {messages.map(msg => (
           <Message key={msg.id} message={msg} />
         ))}
@@ -58,7 +58,7 @@ export default function Chat() {
         )}
       </div>
 
-      {/* 7) Chat input and settings button */}
+      {/* Chat input and settings button */}
       <div className="fixed bottom-0 w-full bg-white p-2">
         <div
           className="
@@ -67,7 +67,7 @@ export default function Chat() {
             md:mx-auto md:max-w-md
           "
         >
-          {/* 7.1) chat input */}
+          {/* chat input */}
           <form onSubmit={handleFormSubmit} className="w-full">
             <input
               value={input}
@@ -80,7 +80,7 @@ export default function Chat() {
             />
           </form>
 
-          {/* 7.2) settings button */}
+          {/* settings button */}
           <Button
             variant="default"
             onClick={() => setIsModalOpen(true)}
@@ -89,7 +89,7 @@ export default function Chat() {
             🔧
           </Button>
         </div>
-        {/* 8) Settings modal for METAR input */}
+        {/* Settings modal for METAR input */}
         <Modal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}

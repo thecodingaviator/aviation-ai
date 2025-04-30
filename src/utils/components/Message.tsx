@@ -1,17 +1,18 @@
 import React from 'react';
 import { Message as MessageType } from '@ai-sdk/react';
 
+// Importing the Message type from the AI SDK
 interface MessageProps {
   message: MessageType;
 }
 
-// 1) Message component: renders a single chat bubble
+// Message component: renders a single chat bubble
 const Message = ({ message }: MessageProps) => {
-  // 2) Determine if this message came from the user
+  // Determine if this message came from the user
   const isUser = message.role === 'user';
 
   return (
-    // 3) Outer container with conditional styling based on sender
+    // Outer container with conditional styling based on sender
     <div
       key={message.id}
       className={`
@@ -22,12 +23,12 @@ const Message = ({ message }: MessageProps) => {
         }
       `}
     >
-      {/* 4) Header: show “You” for user, “Aviation AI” otherwise */}
+      {/* Header: show “You” for user, “Aviation AI” otherwise */}
       <div className='font-mono uppercase tracking-wider mb-2'>
         {isUser ? 'You' : 'Aviation AI'}
       </div>
 
-      {/* 5) Body: render each text part in its own div */}
+      {/* Body: render each text part in its own div */}
       <div className='font-mono text-sm leading-relaxed whitespace-pre-wrap'>
         {message.parts?.map((part, i) => {
           if (part.type === 'text') {
@@ -39,5 +40,5 @@ const Message = ({ message }: MessageProps) => {
   );
 };
 
-// 6) Export the Message component
+// Export the Message component
 export default Message;

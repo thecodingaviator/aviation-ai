@@ -43,12 +43,12 @@ export interface FlightPlan {
 export type PlanSearchResponse = FlightPlan[];
 
 export async function GET(request: NextRequest) {
-  // 1) Extract and trim query parameters
+  // Extract and trim query parameters
   const { searchParams } = new URL(request.url);
   const fromICAO = searchParams.get('fromICAO')?.trim();
   const toICAO   = searchParams.get('toICAO')?.trim();
 
-  // 2) Validate required parameters
+  // Validate required parameters
   if (!fromICAO || !toICAO) {
     return NextResponse.json(
       { error: 'Missing query parameters: fromICAO and toICAO are required' },
@@ -56,13 +56,13 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  // 3) Build the FlightPlanDatabase API URL (limit to 1 result)
+  // Build the FlightPlanDatabase API URL (limit to 1 result)
   const searchUrl = `https://api.flightplandatabase.com/search/plans?fromICAO=${fromICAO}&toICAO=${toICAO}&limit=1`;
 
-  // 4) Fetch from FPDB
+  // Fetch from FPDB
   const res = await fetch(searchUrl);
 
-  // 5) Handle upstream API errors
+  // Handle upstream API errors
   if (!res.ok) {
     return NextResponse.json(
       { error: `FPDB API error ${res.status}: ${res.statusText}` },
@@ -70,10 +70,10 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  // 6) Parse JSON response into our typed array
+  // Parse JSON response into our typed array
   const plans = (await res.json()) as PlanSearchResponse;
 
-  // 7) Handle case with no matching flight plans
+  // Handle case with no matching flight plans
   if (plans.length === 0) {
     return NextResponse.json(
       { error: `No flight plans found from ${fromICAO} to ${toICAO}` },
@@ -81,6 +81,6 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  // 8) Return the encoded polyline of the first plan
+  // Return the encoded polyline of the first plan
   return NextResponse.json({ encodedPolyline: plans[0].encodedPolyline });
 }

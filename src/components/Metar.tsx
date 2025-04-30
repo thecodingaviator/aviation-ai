@@ -1,0 +1,74 @@
+// utils/components/Metar.tsx
+import React from 'react';
+import Button from '@/utils/components/Button';
+
+interface MetarProps {
+  onInsert: (value: string) => void;
+  onClose: () => void;
+}
+
+const Metar: React.FC<MetarProps> = ({ onInsert, onClose }) => {
+  const [metarParam, setMetarParam] = React.useState<string>('');
+  const [metar, setMetar] = React.useState<string>('');
+
+  // Fetch METAR given ICAO or location string
+  const fetchMetar = async (param: string): Promise<void> => {
+    const res = await fetch(`/api/metar?q=${param}`);
+    if (res.ok) {
+      const text = await res.text();
+      setMetar(text);
+    } else {
+      setMetar('Error fetching METAR');
+    }
+  };
+
+  return (
+    <div className="flex flex-col space-y-4">
+      <h3 className="uppercase tracking-wide text-lg">Get METAR</h3>
+      <div className="grid items-center gap-4 grid-cols-[7fr_1fr_1fr] max-[660px]:grid-cols-2">
+        <input
+          type="text"
+          placeholder="ICAO or location"
+          value={metarParam}
+          onChange={e => setMetarParam(e.target.value)}
+          className="flex-1 bg-gray-100 bg-opacity-80 font-mono border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-gray-300 placeholder-gray-500 max-[660px]:col-span-2"
+        />
+        <Button
+          variant="default"
+          onClick={() => fetchMetar(metarParam)}
+          className="w-20 max-[660px]:w-full"
+        >
+          GET
+        </Button>
+        <Button
+          variant={
+            !metar || metar.toLowerCase().startsWith('error')
+              ? 'disabled'
+              : 'default'
+          }
+          disabled={!metar || metar.toLowerCase().startsWith('error')}
+          onClick={() => {
+            if (!metar.toLowerCase().startsWith('error')) {
+              onInsert('Decode: ' + metar);
+              setMetarParam('');
+              setMetar('');
+              onClose();
+            }
+          }}
+          className="self-end max-[660px]:self-auto max-[660px]:w-full"
+        >
+          Insert
+        </Button>
+      </div>
+      {metar && (
+        <div className="mt-4 flex flex-col space-y-2">
+          <pre className="bg-gray-100 bg-opacity-80 font-mono text-sm border border-gray-300 rounded-lg p-4 overflow-auto max-h-40 w-full">
+            {metar}
+          </pre>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Metar;

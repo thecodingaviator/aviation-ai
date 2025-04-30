@@ -5,7 +5,7 @@ import { Pinecone } from '@pinecone-database/pinecone';
 // Allow streaming responses up to 30 seconds
 export const maxDuration = 30;
 
-// 1) Set up Pinecone
+// Set up Pinecone
 const pinecone = new Pinecone({
   apiKey: process.env.PINECONE_API_KEY || '',
 });
@@ -16,14 +16,14 @@ const namespace = pinecone.index(index).namespace('');
 export async function POST(req: Request) {
   const { messages } = await req.json();
 
-  // 2) Extract the user's query and embed it
+  // Extract the user's query and embed it
   const query = messages[messages.length - 1].content;
   const { embedding: queryVector } = await embed({
     model: openai.embedding('text-embedding-ada-002'),
     value: query,
   });
 
-  // 3) Retrieve the top-4 relevant handbook snippets from Pinecone
+  // Retrieve the top-4 relevant handbook snippets from Pinecone
   const pineconeResponse = await namespace.searchRecords({
     query: {
       topK: 4,
@@ -31,7 +31,7 @@ export async function POST(req: Request) {
     }
   });
 
-  // 4) Build the system-prompt with context and “Aviation AI” instructions
+  // Build the system-prompt with context and “Aviation AI” instructions
   const systemPrompt = `
     If the query: '${query}' is not aviation-related, respond: “I'm sorry, I can't help with that. I'm only trained to work with aviation-related questions,” unless it is a greeting or asking about your abilities/what can you do/who you are, in which case refer to the below.
 
@@ -74,19 +74,19 @@ export async function POST(req: Request) {
     Context: ${JSON.stringify(pineconeResponse.result.hits)}
   `.trim();
 
-  // 5) Prepend our system-prompt to the user's message history
+  // Prepend our system-prompt to the user's message history
   const augmented = [
     { role: 'system', content: systemPrompt },
     ...messages
   ];
 
-  // 6) Call OpenAI's GPT-4o with streaming
+  // Call OpenAI's GPT-4o with streaming
   const result = streamText({
     model: openai('gpt-4o'),
     system: '',
     messages: augmented,
   });
 
-  // 7) Return the AI's streaming response back to the client
+  // Return the AI's streaming response back to the client
   return result.toDataStreamResponse();
 }
