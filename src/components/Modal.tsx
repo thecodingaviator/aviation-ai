@@ -169,7 +169,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, onInsert }) => {
                 {routeError}
               </pre>
             )}
-            <div className='w-full h-[400px]'>
+            <div className='w-full h-[300px]'>
               <PolylineMap encoded={encoded} width='100%' height='100%' />
             </div>
           </div>

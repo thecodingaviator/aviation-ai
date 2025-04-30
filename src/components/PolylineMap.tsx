@@ -15,7 +15,7 @@ interface PolylineMapProps {
 export default function PolylineMap({
   encoded,
   width = '100%',
-  height = '400px',
+  height = '300px',
 }: PolylineMapProps) {
   // 3) Load the Google Maps JS API
   const { isLoaded, loadError } = useJsApiLoader({
@@ -32,8 +32,8 @@ export default function PolylineMap({
     return polyline.decode(encoded).map(([lat, lng]) => ({ lat, lng }));
   }, [encoded]);
 
-  // 6) Determine the initial map center (first point or fallback)
-  const center = path[0] ?? { lat: 0, lng: 0 };
+  // 6) Determine the initial map center (first point or fallback - Dayton, OH)
+  const center = path[0] ?? { lat: 39.754669558947555, lng: -84.21155425333451 };
 
   // 7) On path change: remove any old polyline and draw the new one
   useEffect(() => {
