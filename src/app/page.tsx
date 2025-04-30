@@ -39,27 +39,38 @@ export default function Chat() {
         ))}
       </div>
 
-      {/* 6) Fixed input bar for sending new messages */}
-      <div className='fixed bottom-0 w-full bg-white'>
-        <form onSubmit={handleSubmit}>
-          <input
-            className='mx-auto block dark:bg-zinc-900 w-full max-w-md p-2 mt-2 mb-8 border border-zinc-300 dark:border-zinc-800 rounded shadow-xl'
-            value={input}
-            placeholder='Ask away...'
-            onChange={handleInputChange}
-          />
-        </form>
-      </div>
-
-      {/* 7) Fixed toolbar: settings button and modal */}
-      <div className='fixed bottom-0 w-full bg-white'>
-        <Button
-          variant='default'
-          className='fixed bottom-0 right-10 mb-8'
-          onClick={() => setModalOpen(true)}
+      {/* 6) Chat input and settings button */}
+      <div className="fixed bottom-0 w-full bg-white p-2">
+        <div
+          className="
+            flex items-center justify-between space-x-2
+            max-[660px]:flex-col max-[660px]:space-y-2 max-[660px]:space-x-0
+            md:mx-auto md:max-w-md
+          "
         >
-          🔧
-        </Button>
+          {/* chat input */}
+          <form onSubmit={handleSubmit} className="w-full">
+            <input
+              value={input}
+              onChange={handleInputChange}
+              placeholder="Ask away..."
+              className="
+                w-full p-2 border border-zinc-300 rounded shadow-xl
+                dark:bg-zinc-900 dark:border-zinc-800
+              "
+            />
+          </form>
+
+          {/* settings button */}
+          <Button
+            variant="default"
+            onClick={() => setModalOpen(true)}
+            className="w-full md:w-auto"
+          >
+            🔧
+          </Button>
+        </div>
+        {/* 7) Settings modal for METAR input */}
         <Modal
           isOpen={isModalOpen}
           onClose={() => setModalOpen(false)}
