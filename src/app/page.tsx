@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import Message from '@/components/Message';
+import Message from '@/utils/components/Message';
 import Modal from '@/components/Modal';
-import Button from '@/components/Button';
+import Button from '@/utils/components/Button';
 import { useChat } from '@ai-sdk/react';
 
 export default function Chat() {
