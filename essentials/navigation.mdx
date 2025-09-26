@@ -1,0 +1,66 @@
+---
+title: 'Navigation'
+description: 'Structure your documentation with navigation'
+---
+
+## Navigation Structure
+
+Define your navigation in `mint.json`:
+
+```json
+{
+  "navigation": [
+    {
+      "group": "Get Started",
+      "pages": [
+        "introduction",
+        "quickstart",
+        "development"
+      ]
+    },
+    {
+      "group": "Essentials",
+      "pages": [
+        "essentials/markdown",
+        "essentials/code",
+        "essentials/images"
+      ]
+    }
+  ]
+}
+```
+
+## Page Organization
+
+### Groups
+
+Group related pages together for better organization.
+
+### Nested Pages
+
+Create nested folder structures for complex documentation:
+
+```
+docs/
+├── essentials/
+│   ├── markdown.mdx
+│   ├── code.mdx
+│   └── images.mdx
+└── api-reference/
+    ├── introduction.mdx
+    └── endpoint/
+        ├── get.mdx
+        ├── create.mdx
+        └── delete.mdx
+```
+
+### Page Metadata
+
+Use frontmatter to control page properties:
+
+```yaml
+---
+title: 'Page Title'
+description: 'Page description for SEO'
+---
+```

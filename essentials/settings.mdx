@@ -1,0 +1,83 @@
+---
+title: 'Settings'
+description: 'Configure your documentation site'
+---
+
+## Global Settings
+
+Configure your documentation in `mint.json`:
+
+### Basic Configuration
+
+```json
+{
+  "name": "Your Docs",
+  "logo": {
+    "dark": "/logo/dark.svg",
+    "light": "/logo/light.svg"
+  },
+  "favicon": "/favicon.svg"
+}
+```
+
+### Colors
+
+```json
+{
+  "colors": {
+    "primary": "#0D9373",
+    "light": "#07C983",
+    "dark": "#0D9373"
+  }
+}
+```
+
+### Navigation
+
+```json
+{
+  "navigation": [
+    {
+      "group": "Get Started",
+      "pages": [
+        "introduction",
+        "quickstart"
+      ]
+    }
+  ]
+}
+```
+
+## Tabs
+
+Add tabs to organize your content:
+
+```json
+{
+  "tabs": [
+    {
+      "name": "API Reference",
+      "url": "api-reference"
+    }
+  ]
+}
+```
+
+## Topbar
+
+Customize your topbar:
+
+```json
+{
+  "topbarLinks": [
+    {
+      "name": "Support",
+      "url": "mailto:support@example.com"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Dashboard",
+    "url": "https://dashboard.example.com"
+  }
+}
+```

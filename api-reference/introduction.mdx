@@ -1,0 +1,83 @@
+---
+title: 'API Reference'
+description: 'Complete reference for the Aviation AI API'
+---
+
+Welcome to the Aviation AI API documentation. Our API provides powerful endpoints for aviation data, flight tracking, and intelligent aviation insights.
+
+## Authentication
+
+All API requests require authentication using an API key:
+
+```bash
+curl -H "Authorization: Bearer YOUR_API_KEY" \
+  https://api.aviation-ai.com/v1/flights
+```
+
+## Base URL
+
+All API requests should be made to:
+
+```
+https://api.aviation-ai.com/v1
+```
+
+## Rate Limits
+
+API requests are rate limited to:
+- **100 requests per minute** for free tier
+- **1000 requests per minute** for pro tier
+- **10000 requests per minute** for enterprise tier
+
+## Response Format
+
+All API responses are returned in JSON format:
+
+```json
+{
+  "success": true,
+  "data": {},
+  "message": "Request successful"
+}
+```
+
+## Error Handling
+
+Error responses include:
+
+```json
+{
+  "success": false,
+  "error": {
+    "code": "INVALID_REQUEST",
+    "message": "The request parameters are invalid"
+  }
+}
+```
+
+## SDKs
+
+We provide official SDKs for popular programming languages:
+
+<CardGroup cols={2}>
+  <Card title="JavaScript/Node.js" icon="js">
+    ```bash
+    npm install aviation-ai-sdk
+    ```
+  </Card>
+  <Card title="Python" icon="python">
+    ```bash
+    pip install aviation-ai
+    ```
+  </Card>
+  <Card title="PHP" icon="php">
+    ```bash
+    composer require aviation-ai/sdk
+    ```
+  </Card>
+  <Card title="Go" icon="golang">
+    ```bash
+    go get github.com/aviation-ai/go-sdk
+    ```
+  </Card>
+</CardGroup>

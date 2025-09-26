@@ -1,0 +1,151 @@
+---
+title: "Create Flight Alert"
+api: "POST https://api.aviation-ai.com/v1/alerts"
+description: "Create a new flight alert for monitoring specific flights or routes"
+---
+
+## Request Body
+
+<ParamField body="flight_number" type="string" required>
+  Flight number to monitor (e.g., "AA123")
+</ParamField>
+
+<ParamField body="alert_type" type="string" required>
+  Type of alert: `departure`, `arrival`, `delay`, `cancellation`
+</ParamField>
+
+<ParamField body="notification_method" type="string" required>
+  How to receive notifications: `email`, `sms`, `webhook`
+</ParamField>
+
+<ParamField body="contact_info" type="string" required>
+  Email address, phone number, or webhook URL based on notification method
+</ParamField>
+
+<ParamField body="conditions" type="object">
+  Optional conditions for the alert
+  <Expandable title="properties">
+    <ParamField body="delay_threshold" type="number">
+      Minimum delay in minutes to trigger alert (for delay alerts)
+    </ParamField>
+    <ParamField body="advance_notice" type="number">
+      Minutes before event to send notification
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Response
+
+<ResponseField name="id" type="string">
+  Unique alert identifier
+</ResponseField>
+
+<ResponseField name="flight_number" type="string">
+  The monitored flight number
+</ResponseField>
+
+<ResponseField name="alert_type" type="string">
+  Type of alert created
+</ResponseField>
+
+<ResponseField name="status" type="string">
+  Alert status: `active`, `paused`, `expired`
+</ResponseField>
+
+<ResponseField name="created_at" type="string">
+  ISO 8601 formatted creation timestamp
+</ResponseField>
+
+<ResponseField name="expires_at" type="string">
+  ISO 8601 formatted expiration timestamp
+</ResponseField>
+
+<RequestExample>
+
+```bash cURL
+curl -X POST "https://api.aviation-ai.com/v1/alerts" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "flight_number": "AA123",
+    "alert_type": "delay",
+    "notification_method": "email",
+    "contact_info": "user@example.com",
+    "conditions": {
+      "delay_threshold": 30,
+      "advance_notice": 15
+    }
+  }'
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.aviation-ai.com/v1/alerts', {
+  method: 'POST',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_KEY',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    flight_number: 'AA123',
+    alert_type: 'delay',
+    notification_method: 'email',
+    contact_info: 'user@example.com',
+    conditions: {
+      delay_threshold: 30,
+      advance_notice: 15
+    }
+  })
+});
+
+const alert = await response.json();
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    'https://api.aviation-ai.com/v1/alerts',
+    headers={
+        'Authorization': 'Bearer YOUR_API_KEY',
+        'Content-Type': 'application/json'
+    },
+    json={
+        'flight_number': 'AA123',
+        'alert_type': 'delay',
+        'notification_method': 'email',
+        'contact_info': 'user@example.com',
+        'conditions': {
+            'delay_threshold': 30,
+            'advance_notice': 15
+        }
+    }
+)
+
+alert = response.json()
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "id": "alert_789012",
+    "flight_number": "AA123",
+    "alert_type": "delay",
+    "notification_method": "email",
+    "contact_info": "user@example.com",
+    "status": "active",
+    "conditions": {
+      "delay_threshold": 30,
+      "advance_notice": 15
+    },
+    "created_at": "2024-01-15T10:00:00Z",
+    "expires_at": "2024-01-16T10:00:00Z"
+  }
+}
+```
+
+</ResponseExample>

@@ -1,0 +1,136 @@
+---
+title: "Get Flight Data"
+api: "GET https://api.aviation-ai.com/v1/flights/{id}"
+description: "Retrieve detailed information about a specific flight"
+---
+
+## Path Parameters
+
+<ParamField path="id" type="string" required>
+  The unique flight identifier (e.g., flight number or internal ID)
+</ParamField>
+
+## Query Parameters
+
+<ParamField query="include" type="string">
+  Comma-separated list of additional data to include: `aircraft`, `route`, `weather`
+</ParamField>
+
+<ParamField query="format" type="string" default="json">
+  Response format: `json` or `xml`
+</ParamField>
+
+## Response
+
+<ResponseField name="id" type="string">
+  Unique flight identifier
+</ResponseField>
+
+<ResponseField name="flight_number" type="string">
+  Commercial flight number (e.g., "AA123")
+</ResponseField>
+
+<ResponseField name="airline" type="object">
+  <Expandable title="properties">
+    <ResponseField name="code" type="string">
+      IATA airline code
+    </ResponseField>
+    <ResponseField name="name" type="string">
+      Full airline name
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="departure" type="object">
+  <Expandable title="properties">
+    <ResponseField name="airport" type="string">
+      IATA airport code
+    </ResponseField>
+    <ResponseField name="scheduled_time" type="string">
+      ISO 8601 formatted departure time
+    </ResponseField>
+    <ResponseField name="actual_time" type="string">
+      ISO 8601 formatted actual departure time
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<ResponseField name="arrival" type="object">
+  <Expandable title="properties">
+    <ResponseField name="airport" type="string">
+      IATA airport code
+    </ResponseField>
+    <ResponseField name="scheduled_time" type="string">
+      ISO 8601 formatted arrival time
+    </ResponseField>
+    <ResponseField name="estimated_time" type="string">
+      ISO 8601 formatted estimated arrival time
+    </ResponseField>
+  </Expandable>
+</ResponseField>
+
+<RequestExample>
+
+```bash cURL
+curl -X GET "https://api.aviation-ai.com/v1/flights/AA123" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json"
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.aviation-ai.com/v1/flights/AA123', {
+  method: 'GET',
+  headers: {
+    'Authorization': 'Bearer YOUR_API_KEY',
+    'Content-Type': 'application/json'
+  }
+});
+
+const flight = await response.json();
+```
+
+```python Python
+import requests
+
+response = requests.get(
+    'https://api.aviation-ai.com/v1/flights/AA123',
+    headers={
+        'Authorization': 'Bearer YOUR_API_KEY',
+        'Content-Type': 'application/json'
+    }
+)
+
+flight = response.json()
+```
+
+</RequestExample>
+
+<ResponseExample>
+
+```json Response
+{
+  "success": true,
+  "data": {
+    "id": "flight_123456",
+    "flight_number": "AA123",
+    "airline": {
+      "code": "AA",
+      "name": "American Airlines"
+    },
+    "departure": {
+      "airport": "JFK",
+      "scheduled_time": "2024-01-15T08:00:00Z",
+      "actual_time": "2024-01-15T08:05:00Z"
+    },
+    "arrival": {
+      "airport": "LAX",
+      "scheduled_time": "2024-01-15T11:30:00Z",
+      "estimated_time": "2024-01-15T11:35:00Z"
+    },
+    "status": "in_flight",
+    "aircraft": "Boeing 737-800"
+  }
+}
+```
+
+</ResponseExample>

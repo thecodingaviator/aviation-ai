@@ -1,0 +1,59 @@
+---
+title: 'Images'
+description: 'Display images and media in your documentation'
+---
+
+## Basic Images
+
+You can add images using standard markdown syntax:
+
+```markdown
+![Alt text](/path/to/image.png)
+```
+
+## Responsive Images
+
+Use the `<img>` tag for more control:
+
+```html
+<img
+  src="/images/example.png"
+  alt="Example image"
+  width="500"
+  height="300"
+/>
+```
+
+## Dark Mode Images
+
+Show different images for light and dark modes:
+
+```html
+<img
+  className="block dark:hidden"
+  src="/images/hero-light.png"
+  alt="Hero Light"
+/>
+<img
+  className="hidden dark:block"
+  src="/images/hero-dark.png"
+  alt="Hero Dark"
+/>
+```
+
+## Image Cards
+
+<CardGroup cols={2}>
+  <Card
+    title="Light Mode"
+    icon="sun"
+  >
+    Optimized for light themes
+  </Card>
+  <Card
+    title="Dark Mode"
+    icon="moon"
+  >
+    Optimized for dark themes
+  </Card>
+</CardGroup>
